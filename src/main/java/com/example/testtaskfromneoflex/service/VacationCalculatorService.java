@@ -11,11 +11,18 @@ import java.time.LocalDate;
 @Service
 public class VacationCalculatorService {
   private static final int AMOUNT_DAYS = 30;
+  private final HolidayManager holidays;
 
   @Autowired
-  private HolidayManager holidays;
+  public VacationCalculatorService(HolidayManager holidays) {
+    this.holidays = holidays;
+  }
 
   public VacationResponse calculateVacation(VacationRequest request) {
+    if (request.getAverageSalary() < 1 || request.getVacationDays() < 1){
+      return new VacationResponse();
+    }
+
     int vacationDays = 0;
 
     if (request.getStartDate() != null && request.getEndDate() != null) {
